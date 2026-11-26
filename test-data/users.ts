@@ -15,4 +15,13 @@ export const standardUser: Credentials = {
   },
 };
 
+export const bookerAdmin: Credentials = {
+  get username(): string {
+    return requireEnv('BOOKER_USERNAME');
+  },
+  get password(): string {
+    return requireEnv('BOOKER_PASSWORD');
+  },
+};
+
 export const wrongPassword = 'wrong_password';
