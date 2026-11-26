@@ -1,7 +1,8 @@
 # Found bugs
 
-Defects found in https://www.saucedemo.com while writing and running the UI tests.
-Format and rules: `CLAUDE.md`, section *Defects*.
+Defects found in https://www.saucedemo.com (UI) and https://restful-booker.herokuapp.com
+(API) while writing and running the tests.
+Format and rules: the `bug-report` skill (`.claude/skills/bug-report/SKILL.md`).
 
 | ID | Title | Severity | Priority | Test |
 |---|---|---|---|---|
@@ -10,6 +11,9 @@ Format and rules: `CLAUDE.md`, section *Defects*.
 | [BUG-03](#bug-03) | HTTP 404 returned for /inventory.html and other app pages on load or reload | Minor | Low | — |
 | [BUG-04](#bug-04) | No heading for the page title on Products, Your Cart and checkout pages | Minor | Low | — |
 | [BUG-05](#bug-05) | "Permissions policy violation" error in the console on every page load | Trivial | Low | — |
+| [BUG-06](#bug-06) | 200 OK instead of 401 for POST /auth with a wrong password | Minor | Medium | API-02 |
+| [BUG-07](#bug-07) | 500 Internal Server Error for POST /booking without required fields | Minor | Medium | API-04 |
+| [BUG-08](#bug-08) | 405 instead of 404 for DELETE /booking/{id} of a deleted booking | Trivial | Low | — |
 
 ---
 
@@ -165,3 +169,83 @@ Each page load logs one error:
 `Permissions policy violation: unload is not allowed in this document.`
 from `https://www.saucedemo.com/assets/index-DnLqFcJI.js:3`.
 The page works; the user sees no effect.
+
+---
+
+## BUG-06
+
+**Title:** 200 OK instead of 401 for POST /auth with a wrong password
+
+| Field | Value |
+|---|---|
+| Severity | Minor |
+| Priority | Medium |
+| Environment | https://restful-booker.herokuapp.com; Playwright 1.65.1 and curl 8.7.1; macOS 27.2; 2026-11-26 |
+| Reproducibility | Always |
+| Evidence | Test `API-02 token is refused for a wrong password` (`tests/api/booking.spec.ts`); request and response below |
+
+**Steps to reproduce**
+1. Send `POST /auth` with header `Content-Type: application/json` and body
+   `{"username": "<BOOKER_USERNAME>", "password": "wrong_password"}`.
+
+**Expected result**
+Status `401 Unauthorized`; the body has no token.
+Source: RFC 9110, section 15.5.2: 401 means the request lacks valid authentication
+credentials. The API documentation (Auth - CreateToken) describes only the 200 response.
+
+**Actual result**
+Status `200 OK`, body `{"reason":"Bad credentials"}`.
+
+---
+
+## BUG-07
+
+**Title:** 500 Internal Server Error for POST /booking without required fields
+
+| Field | Value |
+|---|---|
+| Severity | Minor |
+| Priority | Medium |
+| Environment | https://restful-booker.herokuapp.com; Playwright 1.65.1 and curl 8.7.1; macOS 27.2; 2026-11-26 |
+| Reproducibility | Always |
+| Evidence | Test `API-04 booking without required fields is rejected with 400` (`tests/api/booking.spec.ts`); request and response below |
+
+**Steps to reproduce**
+1. Send `POST /booking` with headers `Content-Type: application/json`,
+   `Accept: application/json` and body `{"firstname": "Test"}`.
+
+**Expected result**
+Status `400 Bad Request`.
+Source: RFC 9110, section 15.5.1: 400 is for a request the server will not process
+because of a client error. The API documentation (Booking - CreateBooking) lists
+`lastname`, `totalprice`, `depositpaid`, and `bookingdates` in the request body and does
+not mark them optional (PartialUpdateBooking marks its fields optional).
+
+**Actual result**
+Status `500 Internal Server Error`, body `Internal Server Error`.
+
+---
+
+## BUG-08
+
+**Title:** 405 instead of 404 for DELETE /booking/{id} of a deleted booking
+
+| Field | Value |
+|---|---|
+| Severity | Trivial |
+| Priority | Low |
+| Environment | https://restful-booker.herokuapp.com; curl 8.7.1; macOS 27.2; 2026-11-26 |
+| Preconditions | A valid token from `POST /auth`; a booking deleted with `DELETE /booking/{id}` (`201 Created`) |
+| Reproducibility | Always |
+| Evidence | Found while exploring the API with curl; no test. Requests and responses below |
+
+**Steps to reproduce**
+1. Send `DELETE /booking/{id}` for the deleted booking, with header `Cookie: token=<token>`.
+
+**Expected result**
+Status `404 Not Found`.
+Source: RFC 9110, section 15.5.5: 404 means the server did not find the target
+resource. The API itself answers `404 Not Found` to `GET /booking/{id}` for the same id.
+
+**Actual result**
+Status `405 Method Not Allowed`, body `Method Not Allowed`.
