@@ -1,4 +1,10 @@
+import { existsSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
+
+// Local runs read credentials from .env; CI passes them as environment variables.
+if (existsSync('.env')) {
+  process.loadEnvFile('.env');
+}
 
 const ci = Boolean(process.env.CI);
 
