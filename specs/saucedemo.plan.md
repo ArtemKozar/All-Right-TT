@@ -2,7 +2,7 @@
 
 ## Application Overview
 
-Plan for https://www.saucedemo.com, user standard_user only. The password is shown on the login page under "Password for all users:" (value observed: secret_sauce); store it in test-data/. Each test starts from a fresh browser context (not logged in, empty cart).
+Plan for https://www.saucedemo.com, user standard_user only. The password is shown on the login page under "Password for all users:"; tests read the username and password from .env (SAUCE_USERNAME, SAUCE_PASSWORD). Each test starts from a fresh browser context (not logged in, empty cart).
 
 Rules for exploration: close the side menu with "Close Menu" before any other click; never open "About" or "Dynamic Catalog". Use fake form data only (First Name "Test", Last Name "User", Zip/Postal Code "12345").
 

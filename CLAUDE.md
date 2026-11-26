@@ -46,6 +46,9 @@ Create a folder together with its first file, never empty in advance.
 - Every test is independent. No state is shared between tests.
 - Test data lives in `test-data/`, never inline in a spec: the values typed in and the
   texts asserted on.
+- Credentials come from `.env` (`.env.example` lists the keys; CI uses GitHub Secrets),
+  read with `requireEnv()` from `utils/env.ts`. Never put them in code, test data, or
+  plans, even when the demo site shows them publicly.
 - Values that must be unique (booking names) are built by a function in `test-data/` with
   a short suffix unique to each execution (8 random hex characters from `node:crypto`).
 - Test titles start with the case ID, then describe business behavior:
