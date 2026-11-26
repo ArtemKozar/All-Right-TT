@@ -104,34 +104,8 @@ Create a folder together with its first file, never empty in advance.
 
 ## Defects
 - When the system differs from the expected result, do not change the test to match it.
-  The test stays failing and CI stays red. The README lists the bug and the failing test.
-- Before writing a bug report:
-  - reproduce the bug by hand or with playwright-cli;
-  - make sure it is a bug of the system, not of the test;
-  - check that the bug is not reported already.
-- One report describes one bug. Write facts only, no guesses about the cause.
-
-### Title: What? Where? When?
-- **What** is wrong and how it shows; **Where**: the page, element, or endpoint;
-  **When**: the condition that triggers it. In this order.
-- No "When" means the bug always reproduces.
-- Short (up to 80 characters). The title does not propose a fix.
-- Example: `Booking is still returned by GET /booking/{id} after a successful DELETE`.
-
-### Fields
-| Field | Content |
-|---|---|
-| ID | `BUG-01`, `BUG-02` … |
-| Title | What? Where? When? |
-| Severity | Critical / Major / Minor / Trivial: the impact on the user |
-| Priority | High / Medium / Low: how soon it should be fixed |
-| Environment | URL, browser and version, OS, Playwright version, date |
-| Preconditions | user, data, and state before the steps |
-| Steps to reproduce | numbered, minimal |
-| Expected result | what should happen, and its source: the assignment or the API doc section |
-| Actual result | what happened, facts only |
-| Reproducibility | Always, or N of M attempts |
-| Evidence | test ID and title, trace, API request and response |
+  The test stays failing and CI stays red. `BUGS.md` lists the bug and the failing test.
+- Write every bug report with the `bug-report` skill (`.claude/skills/bug-report/`).
 
 
 ## Restrictions
