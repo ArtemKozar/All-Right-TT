@@ -30,6 +30,7 @@ Instructions for the AI agent that writes the tests in this repository.
 - `pages/components/` — parts shared by several pages (header, menu)
 - `api/` — API clients
 - `test-data/` — test data and the texts asserted on
+- `specs/` — test plans written by the Playwright Planner agent
 
 Create a folder together with its first file, never empty in advance.
 
@@ -88,6 +89,14 @@ Create a folder together with its first file, never empty in advance.
   `node_modules/playwright-core/lib/tools/skills/playwright-cli/SKILL.md`.
 - A locator from `npx playwright codegen` is rewritten to the locator priority, never
   copied as it is.
+
+
+## Playwright Test Agents
+- Use only the Planner agent (`.claude/agents/playwright-test-planner.md`). It explores
+  the site and saves a test plan in `specs/`.
+- Do not use the Generator and Healer agents. Generator writes locators into specs;
+  Healer changes expected values and adds `test.fixme()` to get a green run.
+- A person reviews a plan in `specs/` before tests are written from it.
 
 
 ## Defects
