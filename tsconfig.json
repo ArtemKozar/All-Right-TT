@@ -1,0 +1,35 @@
+{
+  // Type checking only: Playwright and Node run the TypeScript sources themselves.
+  // Node strips types natively, so the code uses erasable syntax only and relative
+  // imports name their .ts file.
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": ["es2023", "dom", "dom.iterable"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": [
+    "playwright.config.ts",
+    "tests/**/*.ts",
+    "pages/**/*.ts",
+    "api/**/*.ts",
+    "fixtures/**/*.ts",
+    "test-data/**/*.ts",
+    "utils/**/*.ts"
+  ]
+}
